@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2021  HP / ttelcl
+ * (c) 2021 ttelcl / ttelcl
  */
 
 using System;
