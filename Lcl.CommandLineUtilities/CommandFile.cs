@@ -53,8 +53,97 @@ namespace Lcl.CommandLineUtilities
       string newlineMarker = null,
       int maxRecurse = 8)
     {
-      throw new NotImplementedException();
+      var filter =
+        String.IsNullOrEmpty(recurseArgument)
+        ? null
+        : TokenFilter.InclusionFilter(folder, recurseArgument, maxRecurse);
+      var source =
+        filter == null
+        ? TokenizeCommandFile(lines)
+        : TokenizeCommandFile(lines, filter);
+      foreach(var token in source)
+      {
+        switch(token.TokenType)
+        {
+          case CmdLineTokenType.Eoln:
+            if(!String.IsNullOrEmpty(newlineMarker))
+            {
+              yield return newlineMarker;
+            }
+            break;
+          case CmdLineTokenType.Comment:
+            // discard.
+            break;
+          case CmdLineTokenType.Argument:
+            yield return token.Value;
+            break;
+          default:
+            throw new InvalidOperationException(
+              $"Unsupported token type '{token.TokenType}'");
+        }
+      }
     }
+
+    /// <summary>
+    /// Parse a command file and return all parsed tokens (not just
+    /// arguments). Does not handle recursive includes.
+    /// </summary>
+    /// <param name="lines">
+    /// The lines of the command file to be parsed
+    /// </param>
+    /// <returns>
+    /// A sequence of tokens
+    /// </returns>
+    public static IEnumerable<CommandLineParser.CmdLineToken> TokenizeCommandFile(
+      IEnumerable<string> lines)
+    {
+      var parser = new CommandLineParser();
+      foreach(var line in lines)
+      {
+        parser.StartNextLine(line);
+        foreach(var token in parser.ParseAll())
+        {
+          yield return token;
+        }
+      }
+    }
+
+    /// <summary>
+    /// Parse a command file and return all parsed tokens (not just
+    /// arguments). Handles recursive includes via the provided filter.
+    /// </summary>
+    /// <param name="lines">
+    /// The lines of the command file to be parsed
+    /// </param>
+    /// <param name="filter">
+    /// The filter that expands recursive includes
+    /// </param>
+    /// <returns>
+    /// A sequence of tokens
+    /// </returns>
+    public static IEnumerable<CommandLineParser.CmdLineToken> TokenizeCommandFile(
+      IEnumerable<string> lines,
+      ITokenFilter filter)
+    {
+      foreach(var rawToken in TokenizeCommandFile(lines))
+      {
+        foreach(var token in filter.FilterToken(rawToken))
+        {
+          yield return token;
+        }
+      }
+    }
+
+    internal static IEnumerable<CommandLineParser.CmdLineToken> TokenizeCommandFile(
+      string fileName,
+      ITokenFilter filter)
+    {
+      foreach(var token in TokenizeCommandFile(File.ReadLines(fileName), filter))
+      {
+        yield return token;
+      }
+    }
+
 
     /// <summary>
     /// Read the content of a command file. The words in the file are returned

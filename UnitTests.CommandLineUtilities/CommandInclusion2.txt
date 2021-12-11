@@ -1,0 +1,3 @@
+﻿-pre two-pre
+-@ CommandInclusion1.txt
+-post two-post
