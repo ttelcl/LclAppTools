@@ -34,13 +34,13 @@ namespace UnitTests.CommandLineUtilities
         switch(token.TokenType)
         {
           case CmdLineTokenType.Argument:
-            _output.WriteLine($"ARG: {token.Value}");
+            _output.WriteLine($"ARG@{token.LineNumber}: {token.Value}");
             break;
           case CmdLineTokenType.Comment:
-            _output.WriteLine($"CMT: {token.Value}");
+            _output.WriteLine($"CMT@{token.LineNumber}: {token.Value}");
             break;
           case CmdLineTokenType.Eoln:
-            _output.WriteLine("EOLN");
+            _output.WriteLine($"EOLN@{token.LineNumber}");
             break;
         }
       }

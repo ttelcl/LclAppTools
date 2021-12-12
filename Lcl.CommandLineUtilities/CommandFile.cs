@@ -125,23 +125,14 @@ namespace Lcl.CommandLineUtilities
       IEnumerable<string> lines,
       ITokenFilter filter)
     {
-      foreach(var rawToken in TokenizeCommandFile(lines))
-      {
-        foreach(var token in filter.FilterToken(rawToken))
-        {
-          yield return token;
-        }
-      }
+      return TokenizeCommandFile(lines).Filter(filter);
     }
 
     internal static IEnumerable<CmdLineToken> TokenizeCommandFile(
       string fileName,
       ITokenFilter filter)
     {
-      foreach(var token in TokenizeCommandFile(File.ReadLines(fileName), filter))
-      {
-        yield return token;
-      }
+      return TokenizeCommandFile(File.ReadLines(fileName)).Filter(filter);
     }
 
     /// <summary>

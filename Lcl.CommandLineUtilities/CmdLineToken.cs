@@ -34,10 +34,11 @@ namespace Lcl.CommandLineUtilities
     /// <summary>
     /// Create a new CmdLineToken
     /// </summary>
-    public CmdLineToken(CmdLineTokenType type, string value)
+    public CmdLineToken(CmdLineTokenType type, string value, int lineNumber)
     {
       TokenType = type;
       Value = value;
+      LineNumber = lineNumber;
     }
 
     /// <summary>
@@ -49,6 +50,11 @@ namespace Lcl.CommandLineUtilities
     /// The string value of the token (possibly null, depending on the type)
     /// </summary>
     public string Value { get; }
+
+    /// <summary>
+    /// The line number in the command file, if known, or 0 if not known
+    /// </summary>
+    public int LineNumber { get; }
   }
 
 }

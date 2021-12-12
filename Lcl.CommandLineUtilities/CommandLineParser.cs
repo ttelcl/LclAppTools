@@ -83,7 +83,7 @@ namespace Lcl.CommandLineUtilities
     {
       if(Done)
       {
-        return new CmdLineToken(CmdLineTokenType.Eoln, null);
+        return new CmdLineToken(CmdLineTokenType.Eoln, null, LineNumber);
       }
       if(_mode != CmdParseMode.Idle)
       {
@@ -94,7 +94,7 @@ namespace Lcl.CommandLineUtilities
       if(_pointer >= _input.Length)
       {
         _mode = CmdParseMode.Done;
-        return new CmdLineToken(CmdLineTokenType.Eoln, null);
+        return new CmdLineToken(CmdLineTokenType.Eoln, null, LineNumber);
       }
       // At this point _pointer points to the start of one of:
       // - a normal argument
@@ -119,14 +119,14 @@ namespace Lcl.CommandLineUtilities
           if(_pointer >= _input.Length)
           {
             _mode = CmdParseMode.Done;
-            return new CmdLineToken(CmdLineTokenType.Argument, sb.ToString());
+            return new CmdLineToken(CmdLineTokenType.Argument, sb.ToString(), LineNumber);
           }
           else if(_input[_pointer] != '\"')
           {
             if(Char.IsWhiteSpace(_input[_pointer]))
             {
               _mode = CmdParseMode.Idle;
-              return new CmdLineToken(CmdLineTokenType.Argument, sb.ToString());
+              return new CmdLineToken(CmdLineTokenType.Argument, sb.ToString(), LineNumber);
             }
             else
             {
@@ -146,7 +146,7 @@ namespace Lcl.CommandLineUtilities
         var comment = _input.Substring(_pointer);
         _mode = CmdParseMode.Idle;
         _pointer = _input.Length;
-        return new CmdLineToken(CmdLineTokenType.Comment, comment);
+        return new CmdLineToken(CmdLineTokenType.Comment, comment, LineNumber);
       }
       else
       {
@@ -158,7 +158,7 @@ namespace Lcl.CommandLineUtilities
         var arg = _input.Substring(_pointer, p-_pointer);
         _mode = CmdParseMode.Idle;
         _pointer = p;
-        return new CmdLineToken(CmdLineTokenType.Argument, arg);
+        return new CmdLineToken(CmdLineTokenType.Argument, arg, LineNumber);
       }
     }
 
