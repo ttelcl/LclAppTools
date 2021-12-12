@@ -16,7 +16,7 @@ namespace Lcl.CommandLineUtilities
   /// Filters a sequence of CommandLineParser.CmdLineTokens to
   /// expand recursive includes
   /// </summary>
-  public class CommandFileRecursiveIncludeFilter: ITokenFilter
+  internal class CommandFileRecursiveIncludeFilter: ITokenFilter
   {
     private RecursionFilterState _state;
 
@@ -54,8 +54,7 @@ namespace Lcl.CommandLineUtilities
     /// Implements ITokenFilter, passing most arguments directly,
     /// but trapping and expanding inclusions
     /// </summary>
-    public IEnumerable<CommandLineParser.CmdLineToken> FilterToken(
-      CommandLineParser.CmdLineToken token)
+    public IEnumerable<CmdLineToken> FilterToken(CmdLineToken token)
     {
       switch(_state)
       {

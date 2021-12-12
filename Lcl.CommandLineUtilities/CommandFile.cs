@@ -94,7 +94,7 @@ namespace Lcl.CommandLineUtilities
     /// <returns>
     /// A sequence of tokens
     /// </returns>
-    public static IEnumerable<CommandLineParser.CmdLineToken> TokenizeCommandFile(
+    public static IEnumerable<CmdLineToken> TokenizeCommandFile(
       IEnumerable<string> lines)
     {
       var parser = new CommandLineParser();
@@ -121,7 +121,7 @@ namespace Lcl.CommandLineUtilities
     /// <returns>
     /// A sequence of tokens
     /// </returns>
-    public static IEnumerable<CommandLineParser.CmdLineToken> TokenizeCommandFile(
+    public static IEnumerable<CmdLineToken> TokenizeCommandFile(
       IEnumerable<string> lines,
       ITokenFilter filter)
     {
@@ -134,7 +134,7 @@ namespace Lcl.CommandLineUtilities
       }
     }
 
-    internal static IEnumerable<CommandLineParser.CmdLineToken> TokenizeCommandFile(
+    internal static IEnumerable<CmdLineToken> TokenizeCommandFile(
       string fileName,
       ITokenFilter filter)
     {
@@ -143,7 +143,6 @@ namespace Lcl.CommandLineUtilities
         yield return token;
       }
     }
-
 
     /// <summary>
     /// Read the content of a command file. The words in the file are returned
@@ -184,5 +183,7 @@ namespace Lcl.CommandLineUtilities
         newlineMarker,
         maxRecurse);
     }
+
   }
+
 }

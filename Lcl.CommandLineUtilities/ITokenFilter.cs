@@ -19,8 +19,7 @@ namespace Lcl.CommandLineUtilities
     /// Push the next token to be filtered into this filter and
     /// return the resulting filtered tokens
     /// </summary>
-    IEnumerable<CommandLineParser.CmdLineToken> FilterToken(
-      CommandLineParser.CmdLineToken token);
+    IEnumerable<CmdLineToken> FilterToken(CmdLineToken token);
   }
 
   /// <summary>
@@ -33,8 +32,7 @@ namespace Lcl.CommandLineUtilities
     /// Implements ITokenFilter by returning the argument token
     /// as a singleton
     /// </summary>
-    public IEnumerable<CommandLineParser.CmdLineToken> FilterToken(
-      CommandLineParser.CmdLineToken token)
+    public IEnumerable<CmdLineToken> FilterToken(CmdLineToken token)
     {
       yield return token;
     }
