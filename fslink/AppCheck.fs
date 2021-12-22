@@ -31,26 +31,46 @@ let runCheck args =
   for link in o.Links do
     if link |> Directory.Exists then
       printf "Dir  "
-      link |> printf "%s "
       let di = new DirectoryInfo(link)
       let target = di.LinkTarget
       if target = null then
+        color Color.Blue
+        link |> printf "%s "
+        color Color.DarkGray
         printf " [Not a link]"
+        resetColor()
       else
+        color Color.Cyan
+        link |> printf "%s "
+        color Color.Yellow
         printf " -> "
+        color Color.Blue
         target |> printf "%s"
+        resetColor()
     elif link |> File.Exists then
       printf "File "
-      link |> printf "%s "
       let di = new FileInfo(link)
       let target = di.LinkTarget
       if target = null then
+        color Color.DarkGreen
+        link |> printf "%s "
+        color Color.DarkGray
         printf " [Not a link]"
+        resetColor()
       else
+        color Color.Green
+        link |> printf "%s "
+        color Color.Yellow
         printf " -> "
+        color Color.DarkGreen
         target |> printf "%s"
+        resetColor()
     else
       printf "---- "
+      color Color.Red
       link |> printf "%s "
+      color Color.DarkYellow
       printf " [Does not exist]"
+      resetColor()
+    printfn "."
   0
