@@ -11,6 +11,8 @@ let run arglist =
   match arglist with
   | "check" :: rest ->
     rest |> AppCheck.runCheck
+  | "create" :: rest ->
+    rest |> AppCreate.runCreate
   | []
   | "-h" :: _
   | "help" :: _ ->
