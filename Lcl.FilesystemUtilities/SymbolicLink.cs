@@ -49,6 +49,19 @@ namespace Lcl.FilesystemUtilities
     }
 
     /// <summary>
+    /// Create a new junction to this target directory, and return the new link as 
+    /// a new DirectoryInfo object. Junctions are a Windows NTFS specific feature
+    /// </summary>
+    public static DirectoryInfo CreateJunctionAs(this DirectoryInfo target, string junctionPath)
+    {
+      if(!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+      {
+        throw new PlatformNotSupportedException("Junctions are specific to Windows");
+      }
+      throw new NotImplementedException("Junction creation not yet implemented");
+    }
+
+    /// <summary>
     /// Create a new symbolic link to this target file, and return the new link as 
     /// a new FileInfo object
     /// </summary>

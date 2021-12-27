@@ -2,15 +2,17 @@
 
 open System
 open System.IO
+open System.Runtime.InteropServices
+open System.ComponentModel
+open System.Runtime.InteropServices
 
 open CommonTools
 
 open Lcl.FilesystemUtilities
-open System.Runtime.InteropServices
-open System.ComponentModel
 
 type private CreateOptions = {
   LinkName: string
+  JunctionMode: bool
   TargetName: string
   AllowExist: bool
 }
@@ -21,8 +23,12 @@ let runCreate args =
     | "-v" :: rest ->
       verbose <- true
       rest |> parseMore o
-    | "-l" :: link :: rest ->
-      rest |> parseMore {o with LinkName = link}
+    | "-s" :: link :: rest ->
+      rest |> parseMore {o with LinkName = link; JunctionMode = false}
+    | "-j" :: junction :: rest ->
+      if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) |> not then
+        failwith "'-j' requires Windows"
+      rest |> parseMore {o with LinkName = junction; JunctionMode = true}
     | "-t" :: target :: rest ->
       rest |> parseMore {o with TargetName = target}
     | "-nx" :: rest ->
@@ -37,10 +43,13 @@ let runCreate args =
       x |> failwithf "Unrecognized argument '%s'"
   let o = args |> parseMore {
     LinkName = null
+    JunctionMode = false
     TargetName = null
     AllowExist = false
   }
   if o.TargetName |> File.Exists then
+    if o.JunctionMode then
+      failwith "Junction creation ('-j') requires a directory as target, not a file"
     // file link mode
     let target = new FileInfo(o.TargetName)
     let link = new FileInfo(o.LinkName |> Path.GetFullPath)
@@ -71,21 +80,28 @@ let runCreate args =
       else
         link.FullName |> failwithf "Link directory already exists: %s"
     else
-      let sl = target.CreateSymbolicLinkAs(link.FullName)
-      //let sl = Directory.CreateSymbolicLink(link.FullName, target.FullName)
-      //let e = Marshal.GetLastPInvokeError()
-      //if e <> 0 then
-      //  new Win32Exception(e) |> raise
-      printf "Created "
-      color Color.Cyan
-      link.FullName |> printf "%s"
-      resetColor()
-      printf " -> "
-      color Color.Blue
-      target.FullName |> printf "%s"
-      resetColor()
-      printfn "."
-      // printfn "(%O , %O, %d, %d)" sl (sl.Exists) e0 e1
+      if o.JunctionMode then
+        let sl = target.CreateJunctionAs(link.FullName)
+        printf "Created Junction "
+        color Color.Cyan
+        link.FullName |> printf "%s"
+        resetColor()
+        printf " -> "
+        color Color.Blue
+        target.FullName |> printf "%s"
+        resetColor()
+        printfn "."
+      else
+        let sl = target.CreateSymbolicLinkAs(link.FullName)
+        printf "Created SymLink "
+        color Color.Cyan
+        link.FullName |> printf "%s"
+        resetColor()
+        printf " -> "
+        color Color.Blue
+        target.FullName |> printf "%s"
+        resetColor()
+        printfn "."
 
     ()
   else
