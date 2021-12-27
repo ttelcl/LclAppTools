@@ -58,7 +58,10 @@ namespace Lcl.FilesystemUtilities
       {
         throw new PlatformNotSupportedException("Junctions are specific to Windows");
       }
-      throw new NotImplementedException("Junction creation not yet implemented");
+
+      JunctionPoint.Create(Path.GetFullPath(junctionPath), target.FullName, false);
+      target.Refresh();
+      return target;
     }
 
     /// <summary>
