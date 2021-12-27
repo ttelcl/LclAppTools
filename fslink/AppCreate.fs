@@ -71,10 +71,11 @@ let runCreate args =
       else
         link.FullName |> failwithf "Link directory already exists: %s"
     else
-      let sl = Directory.CreateSymbolicLink(link.FullName, target.FullName)
-      let e = Marshal.GetLastPInvokeError()
-      if e <> 0 then
-        new Win32Exception(e) |> raise
+      let sl = target.CreateSymbolicLinkAs(link.FullName)
+      //let sl = Directory.CreateSymbolicLink(link.FullName, target.FullName)
+      //let e = Marshal.GetLastPInvokeError()
+      //if e <> 0 then
+      //  new Win32Exception(e) |> raise
       printf "Created "
       color Color.Cyan
       link.FullName |> printf "%s"

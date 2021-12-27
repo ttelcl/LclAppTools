@@ -4,8 +4,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,11 +28,24 @@ namespace Lcl.FilesystemUtilities
 
     /// <summary>
     /// Create a new symbolic link to this target directory, and return the new link as 
-    /// a new DirectoryInfo object
+    /// a new DirectoryInfo object. Throws a Win32Exception in case something goes wrong
+    /// in the underlying system call.
     /// </summary>
+    /// <exception cref="Win32Exception">
+    /// Thrown if the underlying system call fails, most likely because the user does
+    /// not have the required permission. On a default Windows setup this call
+    /// requires admin privileges.
+    /// </exception>
     public static DirectoryInfo CreateSymbolicLinkAs(this DirectoryInfo target, string linkPath)
     {
-      return (DirectoryInfo)Directory.CreateSymbolicLink(linkPath, target.FullName);
+      var di = (DirectoryInfo)Directory.CreateSymbolicLink(linkPath, target.FullName);
+      // Why, oh why, isn't the next bit included in the CreateSymbolicLink call???
+      var e = Marshal.GetLastPInvokeError();
+      if(e != 0)
+      {
+        throw new Win32Exception(e);
+      }
+      return di;
     }
 
     /// <summary>
@@ -39,7 +54,14 @@ namespace Lcl.FilesystemUtilities
     /// </summary>
     public static FileInfo CreateSymbolicLinkAs(this FileInfo target, string linkPath)
     {
-      return (FileInfo)File.CreateSymbolicLink(linkPath, target.FullName);
+      var fi = (FileInfo)File.CreateSymbolicLink(linkPath, target.FullName);
+      // Why, oh why, isn't the next bit included in the CreateSymbolicLink call???
+      var e = Marshal.GetLastPInvokeError();
+      if(e != 0)
+      {
+        throw new Win32Exception(e);
+      }
+      return fi;
     }
 
     /// <summary>
