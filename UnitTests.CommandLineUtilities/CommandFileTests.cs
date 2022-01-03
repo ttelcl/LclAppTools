@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 
-using Lcl.CommandLineUtilities;
-
 using Xunit;
 using Xunit.Abstractions;
+
+using Lcl.CommandLineUtilities;
 
 namespace UnitTests.CommandLineUtilities
 {

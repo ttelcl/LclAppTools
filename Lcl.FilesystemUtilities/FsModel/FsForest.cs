@@ -71,6 +71,12 @@ namespace Lcl.FilesystemUtilities.FsModel
     {
       path = AnchorNode.NormalizeLabel(path);
       var i = path.Length;
+      // First see if there is an exact match, only start splitting if there isn't
+      if(_anchors.TryGetValue(path, out anchor))
+      {
+        tailPath = String.Empty;
+        return true;
+      }
       while(i > 0)
       {
         i = path.LastIndexOf('/', i-1);
