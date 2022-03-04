@@ -20,7 +20,7 @@ namespace Lcl.FilesystemUtilities.FsModel
     /// <summary>
     /// Create a new AnchorNode
     /// </summary>
-    /// <param name="forest">
+    /// <param name="owner">
     /// The FsForest instance this anchor belongs to
     /// </param>
     /// <param name="label">
@@ -30,11 +30,11 @@ namespace Lcl.FilesystemUtilities.FsModel
     /// if there is a trailing slash it is removed.
     /// </param>
     internal AnchorNode(
-      FsForest forest,
+      FsForest owner,
       string label)
       : base(null, null)
     {
-      Forest = forest;
+      Owner = owner;
       Label = NormalizeLabel(label);
       LabelTag = $"<{Label}>";
     }
@@ -56,7 +56,7 @@ namespace Lcl.FilesystemUtilities.FsModel
     /// <summary>
     /// The owning FsForest instance
     /// </summary>
-    public FsForest Forest { get; }
+    public FsForest Owner { get; }
 
     /// <summary>
     /// The label for this anchor: if it represents an actual directory then

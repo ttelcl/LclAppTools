@@ -13,6 +13,8 @@ let run arglist =
     rest |> AppCheck.runCheck
   | "create" :: rest ->
     rest |> AppCreate.runCreate
+  | "resolve" :: rest ->
+    rest |> AppResolve.runResolve
   | []
   | "-h" :: _
   | "help" :: _ ->

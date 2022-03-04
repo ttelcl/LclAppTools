@@ -20,6 +20,11 @@ let usage() =
   p2 "-nx              If the link already exists and points to the given target"
   p2 "                 do not fail but succeed (only create if Not eXisting)"
   pn ""
+  py "fslink resolve <directory>"
+  pn "  Prints the full path the directory resolves to after following any"
+  pn "  symbolic links or junctions in the path."
+  pn "  (does not resolve SUBST drives on Windows)"
+  pn ""
   py "General options:"
   p2 "-v               Verbose mode"
 

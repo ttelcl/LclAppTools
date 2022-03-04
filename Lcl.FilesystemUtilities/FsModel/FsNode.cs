@@ -139,7 +139,7 @@ namespace Lcl.FilesystemUtilities.FsModel
     /// <summary>
     /// Get the forest this node ultimately belongs to
     /// </summary>
-    public FsForest Forest { get => Anchor.Forest; }
+    public FsForest Forest { get => Anchor.Owner; }
 
     /// <summary>
     /// Test if the given name is a valid node name. To be valid, a node name
