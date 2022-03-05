@@ -102,8 +102,7 @@ namespace Lcl.FilesystemUtilities.FsModel
 
     /// <summary>
     /// Build a best-effort for the true path for the given path,
-    /// with symbolic links and junctions resolved and the original
-    /// case restored
+    /// with symbolic links and junctions resolved.
     /// </summary>
     /// <param name="path">
     /// The existing path to resolve.

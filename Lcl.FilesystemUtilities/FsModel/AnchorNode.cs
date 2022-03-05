@@ -13,7 +13,7 @@ namespace Lcl.FilesystemUtilities.FsModel
 {
   /// <summary>
   /// An anonymous and parentless ContainerNode, acting as the root for
-  /// a filesysytem tree fragment
+  /// a filesysystem tree fragment
   /// </summary>
   public class AnchorNode: ContainerNode
   {
